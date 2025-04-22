@@ -1,0 +1,50 @@
+create database instagram;
+use instagram;
+CREATE TABLE Users (
+    UserID SERIAL PRIMARY KEY,
+    Username VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) NOT NULL,
+    PasswordHash VARCHAR(255) NOT NULL,
+    ProfilePicture VARCHAR(255),
+    Bio TEXT,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE Posts (
+    PostID SERIAL PRIMARY KEY,
+    UserID INT NOT NULL,
+    ContentURL VARCHAR(255),
+    Caption TEXT,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+CREATE TABLE Comments (
+    CommentID SERIAL PRIMARY KEY,
+    PostID INT NOT NULL,
+    UserID INT NOT NULL,
+    Content TEXT NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (PostID) REFERENCES Posts(PostID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+
+CREATE TABLE Likes (
+    LikeID SERIAL PRIMARY KEY,
+    PostID INT NOT NULL,
+    UserID INT NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (PostID) REFERENCES Posts(PostID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+
+CREATE TABLE Follows (
+    FollowerID INT NOT NULL,
+    FolloweeID INT NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (FollowerID, FolloweeID),
+    FOREIGN KEY (FollowerID) REFERENCES Users(UserID)
+);
